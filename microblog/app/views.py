@@ -3,8 +3,15 @@
 from flask import render_template, flash, redirect
 from app import app
 from .forms import LoginForm
-from flask import Flask, request, url_for
-from db import posts
+from flask import Flask, request, url_for, jsonify
+from config import posts
+#from app import get_bd
+#from sqlite3 import dbapi2 as sqlite3
+#DATABASE = './db/test.db'
+from flask import Flask, jsonify, g, request
+from sqlite3 import dbapi2 as sqlite3
+DATABASE = './posts.db'
+
 
 
 @app.route('/')
@@ -54,7 +61,6 @@ base_html = u"""
 """
 
 
-
 @app.route("/posts/cadastro", methods=["GET", "POST"])
 def cadastro():
     if request.method == "POST":
@@ -81,23 +87,50 @@ def cadastro():
 
 
 
-@app.route("/posts/see_all", methods=["GET", "POST"])
-def see_all():
+@app.route("/see_posts", methods=["GET", "POST"])
+def see_posts():
 
     posts_template = u"""
         <a href="/post/{post[id]}">{post[titulo]}</a>
     """
 
-    # it's a kind of magic :)
-    todos_os_posts = [
+    #todos_os_posts = [
 
-        posts_template.format(post=post)
-        for post in posts.all()
-    ]
+    #posts_template.format(post=post)
+    posts_as_dict = []
+    i = 0
+    for p1 in posts.all():
+      i+=1
+    j = 1
+    while j<=i :
+      p = posts.find_one(id=j)
+      posts_as_dict.append(p)
+      j+=1
+    #for post in posts.all():
+     # post_as_dict = {
+      #  'id' : post.id,
+       # 'title' : post.titulo}
+      #p = jsonify(post)
+      #posts_as_dict.append(post)
+      
+    #]
 
-    return base_html.format(
+    #jsonposts = jsonify(results = todos_os_posts) 
+    return jsonify(posts_as_dict)
+    '''return base_html.format(
         title=u"Todos os posts do nosso blog",
         body=u"<br />".join(todos_os_posts)
-    )
+    )'''
+
+
+@app.route("/post/<int:post_id>")
+def post(post_id):
+    post = posts.find_one(id=post_id)  # query no banco de dados
+    post_html = u"""
+        <h1>{titulo}</h1>
+        <p>{texto}</p>
+    """.format(**post)  # remember, Python is full of magic!
+
+    return base_html.format(title=post['titulo'], body=post_html)
 
 
