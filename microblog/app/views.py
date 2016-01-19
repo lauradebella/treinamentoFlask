@@ -1,12 +1,16 @@
+# coding: utf-8
+
 from flask import render_template, flash, redirect
 from app import app
 from .forms import LoginForm
+from flask import Flask, request, url_for
+from db import posts
 
 
 @app.route('/')
 @app.route('/index')
 def index():
-    user = {'nickname': 'Miguel'}
+    user = {'nickname': 'Laura'}
     posts = [
         {
             'author': {'nickname': 'John'},
@@ -34,3 +38,65 @@ def login():
                            title='Sign In',
                            form=form,
                            providers=app.config['OPENID_PROVIDERS'])
+
+
+# por enquanto vamos usar um template html hardcoded
+# mas calma! em breve falaremos  sobre os templates com Jinja2
+base_html = u"""
+  <html>
+  <head>
+      <title>{title}</title>
+  </head>
+  <body>
+     {body}
+  </body>
+  </html>
+"""
+
+
+
+@app.route("/post/cadastro", methods=["GET", "POST"])
+def cadastro():
+    if request.method == "POST":
+        dados_do_formulario = request.form.to_dict()
+        novo_post = posts.insert(dados_do_formulario)
+        return u"""
+            <h1>post id %s inserida com sucesso!</h1>
+            <a href="%s"> Inserir nova notícia </a>
+        """ % (novo_post, url_for('cadastro'))
+    else:  # GET
+        formulario = u"""
+           <form method="post" action="/post/cadastro">
+               <label>Titulo:<br />
+                    <input type="text" name="titulo" id="titulo" />
+               </label>
+               <br />
+               <label>Texto:<br />
+                    <textarea name="texto" id="texto"></textarea>
+               </label>
+               <input type="submit" value="Postar no blog" />
+           </form>
+        """
+        return base_html.format(title=u"Inserir nova post", body=formulario)
+
+
+
+@app.route("/posts", methods=["GET", "POST"])
+def ver_posts():
+
+    posts_template = u"""
+        <a href="/posts/{posts[id]}">{posts[titulo]}</a>
+    """
+
+    # it's a kind of magic :)
+    todos_os_posts = [
+        posts_template.format(posts=posts)
+        for post in posts.all()
+    ]
+
+    return base_html.format(
+        title=u"Todos os posts",
+        body=u"<br />".join(todos_os_posts)
+    )
+
+
