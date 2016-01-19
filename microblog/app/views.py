@@ -55,18 +55,18 @@ base_html = u"""
 
 
 
-@app.route("/post/cadastro", methods=["GET", "POST"])
+@app.route("/posts/cadastro", methods=["GET", "POST"])
 def cadastro():
     if request.method == "POST":
         dados_do_formulario = request.form.to_dict()
         novo_post = posts.insert(dados_do_formulario)
         return u"""
-            <h1>post id %s inserida com sucesso!</h1>
-            <a href="%s"> Inserir nova notícia </a>
+            <h1>Post id %s inserido com sucesso!</h1>
+            <a href="%s"> Inserir novo post </a>
         """ % (novo_post, url_for('cadastro'))
     else:  # GET
         formulario = u"""
-           <form method="post" action="/post/cadastro">
+           <form method="post" action="/posts/cadastro">
                <label>Titulo:<br />
                     <input type="text" name="titulo" id="titulo" />
                </label>
@@ -81,21 +81,22 @@ def cadastro():
 
 
 
-@app.route("/posts", methods=["GET", "POST"])
-def ver_posts():
+@app.route("/posts/see_all", methods=["GET", "POST"])
+def see_all():
 
     posts_template = u"""
-        <a href="/posts/{posts[id]}">{posts[titulo]}</a>
+        <a href="/post/{post[id]}">{post[titulo]}</a>
     """
 
     # it's a kind of magic :)
     todos_os_posts = [
-        posts_template.format(posts=posts)
+
+        posts_template.format(post=post)
         for post in posts.all()
     ]
 
     return base_html.format(
-        title=u"Todos os posts",
+        title=u"Todos os posts do nosso blog",
         body=u"<br />".join(todos_os_posts)
     )
 
