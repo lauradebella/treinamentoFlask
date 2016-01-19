@@ -86,8 +86,7 @@ def cadastro():
         return base_html.format(title=u"Inserir nova post", body=formulario)
 
 
-
-@app.route("/see_posts", methods=["GET", "POST"])
+'''@app.route("/see_posts", methods=["GET", "POST"])
 def see_posts():
 
     posts_template = u"""
@@ -116,11 +115,30 @@ def see_posts():
     #]
 
     #jsonposts = jsonify(results = todos_os_posts) 
-    return jsonify(posts_as_dict)
-    '''return base_html.format(
+    #return jsonify(posts_as_dict)
+    return base_html.format(
         title=u"Todos os posts do nosso blog",
         body=u"<br />".join(todos_os_posts)
     )'''
+
+@app.route("/posts/see_all", methods=["GET", "POST"])
+def see_all():
+
+    posts_template = u"""
+        <a href="/post/{post[id]}">{post[titulo]}</a>
+    """
+
+    # it's a kind of magic :)
+    todos_os_posts = [
+
+        posts_template.format(post=post)
+        for post in posts.all()
+    ]
+
+    return base_html.format(
+        title=u"Todos os posts do nosso blog",
+        body=u"<br />".join(todos_os_posts)
+    )
 
 
 @app.route("/post/<int:post_id>")
