@@ -9,7 +9,7 @@ from config import posts
 #from sqlite3 import dbapi2 as sqlite3
 #DATABASE = './db/test.db'
 from flask import Flask, jsonify, g, request
-from sqlite3 import dbapi2 as sqlite3
+import sqlite3 
 DATABASE = './posts.db'
 
 
@@ -60,6 +60,12 @@ base_html = u"""
   </html>
 """
 
+def query_db(query, args=(), one=False):
+    cur = g.db.execute(query, args)
+    rv = [dict((cur.description[idx][0], value)
+               for idx, value in enumerate(row)) for row in cur.fetchall()]
+    return (rv[0] if rv else None) if one else rv
+
 
 @app.route("/posts/cadastro", methods=["GET", "POST"])
 def cadastro():
@@ -89,37 +95,19 @@ def cadastro():
 @app.route("/see_posts", methods=["GET", "POST"])
 def see_posts():
 
-    posts_template = u"""
-        <a href="/post/{post[id]}">{post[titulo]}</a>
-    """
+    g.db = sqlite3.connect(DATABASE)
 
-    #todos_os_posts = [
+    todos = {}
+    for post in query_db('select * from posts'):
+      print post
+      i = post['id']
+      t = post['titulo']
+      todos[i] =  t 
+    
+    return jsonify(todos)
 
-    #posts_template.format(post=post)
-    posts_as_dict = []
-    i = 0
-    for p1 in posts.all():
-      i+=1
-    j = 1
-    while j<=i :
-      p = posts.find_one(id=j)
-      posts_as_dict.append(p)
-      j+=1
-    #for post in posts.all():
-     # post_as_dict = {
-      #  'id' : post.id,
-       # 'title' : post.titulo}
-      #p = jsonify(post)
-      #posts_as_dict.append(post)
-      
-    #]
+    
 
-    #jsonposts = jsonify(results = todos_os_posts) 
-    #return jsonify(posts_as_dict)
-    return base_html.format(
-        title=u"Todos os posts do nosso blog",
-        body=u"<br />".join(todos_os_posts)
-    )
 
 @app.route("/posts/see_all", methods=["GET", "POST"])
 def see_all():
