@@ -86,7 +86,7 @@ def cadastro():
         return base_html.format(title=u"Inserir nova post", body=formulario)
 
 
-'''@app.route("/see_posts", methods=["GET", "POST"])
+@app.route("/see_posts", methods=["GET", "POST"])
 def see_posts():
 
     posts_template = u"""
@@ -119,7 +119,7 @@ def see_posts():
     return base_html.format(
         title=u"Todos os posts do nosso blog",
         body=u"<br />".join(todos_os_posts)
-    )'''
+    )
 
 @app.route("/posts/see_all", methods=["GET", "POST"])
 def see_all():
