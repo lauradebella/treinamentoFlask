@@ -1,0 +1,21 @@
+
+<html>
+
+	<head>
+		{% if title %}
+		<h1>{{title}}</h1>
+    	{% else %}
+    	<h1>Post sem titulo</h1>
+    	{% endif %}
+	</head>
+	
+
+    
+    {% if texto %}
+    <p>{{texto}}</p>
+    {% else %}
+    <p>Post sem corpo</p>
+    {% endif %}
+
+</html>
+

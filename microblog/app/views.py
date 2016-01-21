@@ -3,7 +3,7 @@
 from flask import render_template, flash, redirect
 from app import app
 from .forms import LoginForm
-from flask import Flask, request, url_for, jsonify
+from flask import Flask, request, url_for, jsonify, json
 from config import posts
 #from app import get_bd
 #from sqlite3 import dbapi2 as sqlite3
@@ -104,7 +104,15 @@ def see_posts():
       t = post['titulo']
       todos[i] =  t 
     
-    return jsonify(todos)
+    js = jsonify(todos)
+    st = json.loads(js)
+    '''st = stringify(json)'''
+    
+    arquivo = open('posts-json.txt', 'w')
+    arquivo.write(st)
+    arquivo.close()
+    return render_template('ajasTable.html',
+                           title='Relacao dos Posts Publicados')
 
     
 
@@ -132,11 +140,7 @@ def see_all():
 @app.route("/post/<int:post_id>")
 def post(post_id):
     post = posts.find_one(id=post_id)  # query no banco de dados
-    post_html = u"""
-        <h1>{titulo}</h1>
-        <p>{texto}</p>
-    """.format(**post)  # remember, Python is full of magic!
-
-    return base_html.format(title=post['titulo'], body=post_html)
-
+    
+    return render_template('post-id.html', title= post['titulo'],
+      texto = post['texto'])
 

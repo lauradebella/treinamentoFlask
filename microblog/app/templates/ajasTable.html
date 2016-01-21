@@ -1,0 +1,49 @@
+
+<html lang="en">
+	<head>
+		{% if title %}
+		<title>{{ title }} - microblog</title>
+		{% else %}
+		<title>microblog</title>
+		{% endif %}
+		<style>
+			.wrapper {
+				text-align: center;
+			}
+			.jsTable * {
+				border: 3px double black;
+				text-align: center;
+				padding: 0;
+			}
+			.jsTable { 
+				width: 95%;
+				margin: 10px auto;
+			}
+			.jsTableHead {
+				font-weight: bold;
+				font-size: 24px;
+				background-color: lightblue;
+			}
+			.jsTableRowHead {
+				font-size: 18px;
+				background: lightblue;
+			}
+			@media (min-width: 470px) {
+				.jsTable {
+					width: 85%;
+				}
+			}
+			@media (min-width: 640px) {
+				.jsTable {
+					width: 65%;
+				}
+			} 
+		</style>
+	</head>
+
+	<body>
+		{% if data %}
+		<script src="AJAXTable.js?dados=data"></script>
+		{% endif %}
+	</body>
+</html>

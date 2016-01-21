@@ -1,7 +1,6 @@
 # coding: utf-8
 
 from flask import Flask, request, url_for
-
 from db import posts
 
 
@@ -48,3 +47,5 @@ def cadastro():
 
 if __name__ == "__main__":
     app.run(debug=True, use_reloader=True)
+
+    
