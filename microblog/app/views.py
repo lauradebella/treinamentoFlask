@@ -14,6 +14,9 @@ DATABASE = './posts.db'
 @app.route('/')
 @app.route('/index')
 def index():
+
+    return render_template('home.html')
+    '''
     user = {'nickname': 'Laura'}
     posts = [
         {
@@ -29,6 +32,8 @@ def index():
                            title='Home',
                            user=user,
                            posts=posts)
+  '''
+
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -89,32 +94,12 @@ def cadastro():
         return base_html.format(title=u"Inserir nova post", body=formulario)
 
 
+
+#exibe o json contendo todos os posts do blog 
 @app.route("/see_posts", methods=["GET", "POST"])
 def see_posts(): 
     return jsonify(posts_table=[post for post in posts.all()])
   
-
-    
-
-
-@app.route("/posts/see_all", methods=["GET", "POST"])
-def see_all():
-
-    posts_template = u"""
-        <a href="/post/{post[id]}">{post[titulo]}</a>
-    """
-
-    # it's a kind of magic :)
-    todos_os_posts = [
-
-        posts_template.format(post=post)
-        for post in posts.all()
-    ]
-
-    return base_html.format(
-        title=u"Todos os posts do nosso blog",
-        body=u"<br />".join(todos_os_posts)
-    )
 
 
 @app.route("/post/<int:post_id>")
@@ -138,4 +123,23 @@ def post(post_id):
       todos[i] =  t 
     
     js = jsonify(todos)'''
+
+
+    #exibe todos os posts do blog a partir de um template
+@app.route("/posts/see_all", methods=["GET", "POST"])
+def see_all():
+
+    posts_template = u"""
+        <a href="/post/{post[id]}">{post[titulo]}</a>
+    """
+    todos_os_posts = [
+
+        posts_template.format(post=post)
+        for post in posts.all()
+    ]
+
+    return base_html.format(
+        title=u"Todos os posts do nosso blog",
+        body=u"<br />".join(todos_os_posts)
+    )
 
