@@ -5,9 +5,6 @@ from app import app
 from .forms import LoginForm
 from flask import Flask, request, url_for, jsonify, json
 from config import posts
-#from app import get_bd
-#from sqlite3 import dbapi2 as sqlite3
-#DATABASE = './db/test.db'
 from flask import Flask, jsonify, g, request
 import sqlite3 
 DATABASE = './posts.db'
@@ -93,26 +90,9 @@ def cadastro():
 
 
 @app.route("/see_posts", methods=["GET", "POST"])
-def see_posts():
-
-    g.db = sqlite3.connect(DATABASE)
-
-    todos = {}
-    for post in query_db('select * from posts'):
-      print post
-      i = post['id']
-      t = post['titulo']
-      todos[i] =  t 
-    
-    js = jsonify(todos)
-    st = json.loads(js)
-    '''st = stringify(json)'''
-    
-    arquivo = open('posts-json.txt', 'w')
-    arquivo.write(st)
-    arquivo.close()
-    return render_template('ajasTable.html',
-                           title='Relacao dos Posts Publicados')
+def see_posts(): 
+    return jsonify(posts_table=[post for post in posts.all()])
+  
 
     
 
@@ -143,4 +123,19 @@ def post(post_id):
     
     return render_template('post-id.html', title= post['titulo'],
       texto = post['texto'])
+
+
+
+
+''' configuracao de acesso ao banco com pequenas partes
+    g.db = sqlite3.connect(DATABASE)
+
+    todos = {}
+    for post in query_db('select * from posts'):
+      print post
+      i = post['id']
+      t = post['titulo']
+      todos[i] =  t 
+    
+    js = jsonify(todos)'''
 
