@@ -16,23 +16,6 @@ DATABASE = './posts.db'
 def index():
 
     return render_template('home.html')
-    '''
-    user = {'nickname': 'Laura'}
-    posts = [
-        {
-            'author': {'nickname': 'John'},
-            'body': 'Beautiful day in Portland!'
-        },
-        {
-            'author': {'nickname': 'Susan'},
-            'body': 'The Avengers movie was so cool!'
-        }
-    ]
-    return render_template('index.html',
-                           title='Home',
-                           user=user,
-                           posts=posts)
-  '''
 
 
 
@@ -71,6 +54,7 @@ def query_db(query, args=(), one=False):
 
 @app.route("/posts/cadastro", methods=["GET", "POST"])
 def cadastro():
+    '''
     if request.method == "POST":
         dados_do_formulario = request.form.to_dict()
         novo_post = posts.insert(dados_do_formulario)
@@ -92,6 +76,14 @@ def cadastro():
            </form>
         """
         return base_html.format(title=u"Inserir nova post", body=formulario)
+'''
+
+  if request.method =="POST":
+    dados_do_formulario = request.form.to_dict()
+    id_novo_post = posts.insert(dados_do_formulario)
+    return render_template('cadastro_sucesso.html', id_novo_post = id_novo_post)
+  else:
+    return render_template('cadastro_formulario.html', title = u"Inserir novo post")
 
 
 
