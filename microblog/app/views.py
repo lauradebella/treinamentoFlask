@@ -54,37 +54,12 @@ def query_db(query, args=(), one=False):
 
 @app.route("/posts/cadastro", methods=["GET", "POST"])
 def cadastro():
-    '''
     if request.method == "POST":
-        dados_do_formulario = request.form.to_dict()
-        novo_post = posts.insert(dados_do_formulario)
-        return u"""
-            <h1>Post id %s inserido com sucesso!</h1>
-            <a href="%s"> Inserir novo post </a>
-        """ % (novo_post, url_for('cadastro'))
-    else:  # GET
-        formulario = u"""
-           <form method="post" action="/posts/cadastro">
-               <label>Titulo:<br />
-                    <input type="text" name="titulo" id="titulo" />
-               </label>
-               <br />
-               <label>Texto:<br />
-                    <textarea name="texto" id="texto"></textarea>
-               </label>
-               <input type="submit" value="Postar no blog" />
-           </form>
-        """
-        return base_html.format(title=u"Inserir nova post", body=formulario)
-'''
-
-  if request.method =="POST":
-    dados_do_formulario = request.form.to_dict()
-    id_novo_post = posts.insert(dados_do_formulario)
-    return render_template('cadastro_sucesso.html', id_novo_post = id_novo_post)
-  else:
-    return render_template('cadastro_formulario.html', title = u"Inserir novo post")
-
+      dados_do_formulario = request.form.to_dict()
+      id_novo_post = posts.insert(dados_do_formulario)
+      return render_template('cadastro-sucesso.html', id_novo_post = id_novo_post)
+    else:
+      return render_template('cadastro-formulario.html', title = u"Inserir novo post")
 
 
 #exibe o json contendo todos os posts do blog 
