@@ -4,7 +4,7 @@
     {% for post in posts %}
     <li>
         <a href="{{url_for('post', post_id=post.id)}}">
-         {{posts.titulo}}
+        {{post.titulo}}
         </a>
     </li>
     {% endfor %}

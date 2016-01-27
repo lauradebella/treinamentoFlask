@@ -9,7 +9,7 @@ OPENID_PROVIDERS = [
     {'name': 'MyOpenID', 'url': 'https://www.myopenid.com'}]
 
 # coding: utf-8
-
+import sqlite3 
 import dataset
 
 db = dataset.connect('sqlite:///posts.db')

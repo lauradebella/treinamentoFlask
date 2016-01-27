@@ -79,23 +79,15 @@ def post(post_id):
 
 
 
-''' configuracao de acesso ao banco com pequenas partes
-    g.db = sqlite3.connect(DATABASE)
-
-    todos = {}
-    for post in query_db('select * from posts'):
-      print post
-      i = post['id']
-      t = post['titulo']
-      todos[i] =  t 
-    
-    js = jsonify(todos)'''
-
-
     #exibe todos os posts do blog a partir de um template
 @app.route("/posts/see_all", methods=["GET", "POST"])
 def see_all():
-
+    todas_as_noticias = posts.all()
+    return render_template('index.html',
+                           posts=todas_as_noticias,
+                           title=u"Todos os Posts do nosso blog",
+                           body = u"<br />.join(todas_as_noticias)")
+'''
     posts_template = u"""
         <a href="/post/{post[id]}">{post[titulo]}</a>
     """
@@ -108,5 +100,6 @@ def see_all():
     return base_html.format(
         title=u"Todos os posts do nosso blog",
         body=u"<br />".join(todos_os_posts)
-    )
+    ) '''
+
 
