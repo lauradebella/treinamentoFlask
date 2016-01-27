@@ -5,4 +5,41 @@
 
 {% block content %}
     <h1>Bem Vindo !!!!</h1>
+    <script type="text/javascript" src="/static/jquery-1.12.0.js"></script>
+    <link type="text/css" rel="stylesheet" href="https://cdn.datatables.net/1.10.10/css/jquery.dataTables.min.css" />
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.10/js/jquery.dataTables.js"> </script>
+
+    <button id="create">Create Post</button>
+
+    <script type="text/javascript" charset="utf-8">
+    $('#create').click(function() {
+        window.location='{{ url_for('cadastro') }}';
+    });
+    </script>
+
+    <h2>Mostrando os dados do JSON</h2>
+
+    <table id="grid" class="display" cellspacing="0" width="100%">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Titulo</th>
+                <th>Texto</th>
+            </tr>
+        </thead>
+    </table>
+
+    <script type="text/javascript" charset="utf-8">
+        $(document).ready(function() {
+            $('#grid').DataTable( {
+                "sAjaxSource": "http://localhost:5000/see_posts",
+                "sAjaxDataProp": "posts",
+                "aoColumnsDefs": [
+                    { "data": "id" },
+                    { "data": "title" },
+                    { "data": "text" }
+                ]
+            });
+        });
+    </script>
 {% endblock %}

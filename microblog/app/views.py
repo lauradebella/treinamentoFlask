@@ -32,18 +32,6 @@ def login():
                            providers=app.config['OPENID_PROVIDERS'])
 
 
-# por enquanto vamos usar um template html hardcoded
-# mas calma! em breve falaremos  sobre os templates com Jinja2
-base_html = u"""
-  <html>
-  <head>
-      <title>{title}</title>
-  </head>
-  <body>
-     {body}
-  </body>
-  </html>
-"""
 
 def query_db(query, args=(), one=False):
     cur = g.db.execute(query, args)
@@ -87,19 +75,5 @@ def see_all():
                            posts=todas_as_noticias,
                            title=u"Todos os Posts do nosso blog",
                            body = u"<br />.join(todas_as_noticias)")
-'''
-    posts_template = u"""
-        <a href="/post/{post[id]}">{post[titulo]}</a>
-    """
-    todos_os_posts = [
-
-        posts_template.format(post=post)
-        for post in posts.all()
-    ]
-
-    return base_html.format(
-        title=u"Todos os posts do nosso blog",
-        body=u"<br />".join(todos_os_posts)
-    ) '''
 
 
